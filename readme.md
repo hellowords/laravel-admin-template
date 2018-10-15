@@ -14,10 +14,10 @@
 
 后台预览
 
-![image1](https://cdn.happyhack.cn/github/images/1.png)
-![image2](https://cdn.happyhack.cn/github/images/2.png)
-![image3](https://cdn.happyhack.cn/github/images/3.png)
-![image4](https://cdn.happyhack.cn/github/images/4.png)
+![image1](https://cdn.happyhack.cn/github/images/laravel-admin-template1.png)
+![image2](https://cdn.happyhack.cn/github/images/laravel-admin-template2.png)
+![image3](https://cdn.happyhack.cn/github/images/laravel-admin-template3.png)
+![image4](https://cdn.happyhack.cn/github/images/laravel-admin-template4.png)
 
 添加了一些配置 邮件需要自己配置、具体查看`.env.example`，新增配置文件在`config/website.php`.
 
@@ -43,8 +43,8 @@
  
  # 如果修改过后台模板需要运行此命令
  #npm run dev 
- 
 ```
+
 ## Todo
 
 - 媒体管理
