@@ -78,14 +78,26 @@
         </div>
       </div>
     </div>
+    <Modal v-model="modalPermission" title="权限" @on-ok="permissionOK" @on-cancel="handleCancel">
+      <CheckboxGroup v-model="permissionsCheck">
+        <Checkbox v-for="(item,index) in permissionData" :label="item.name" :value="item.id" :key="index"></Checkbox>
+      </CheckboxGroup>
+    </Modal>
   </div>
 </template>
 
 <script>
+    import poptipPermission from './poptipPermission.vue';
+
     export default {
+        components: {
+            poptipPermission
+        },
         props: {},
         data() {
             return {
+                modalPermission: false,
+                permissionsCheck: [],
                 loadingPermission: false,
                 loadingRole: false,
                 formPermission: {
@@ -102,14 +114,42 @@
                     {
                         title: '人数',
                         key: 'counts',
-                        render: (h,params)=>{
-                            let counts = params.row.users.length;
+                        render: (h, params) => {
+                            let counts = params.row.users_count;
                             return h('span', {}, counts);
                         }
                     },
                     {
-                        title: '创建时间',
-                        key: 'created_at'
+                        title: '权限',
+                        tooltip: 'true',
+                        key: 'roles',
+                        render: (h, params) => {
+                            let permissions = params.row.permissions.map(res => {
+                                return res['name'];
+                            });
+                            return h(poptipPermission, {
+                                props: {
+                                    permissions: permissions,
+                                }
+                            });
+                        }
+                    },
+                    {
+                        title: '#',
+                        key: 'created_at',
+                        render: (h, params) => {
+                            return h('Button', {
+                                props: {
+                                    size: 'small',
+                                    type: 'primary'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.handleSyncPermissionByRole(params.row);
+                                    }
+                                }
+                            }, '添加权限')
+                        }
                     }
                 ],
                 permissionColumns: [
@@ -119,8 +159,8 @@
                     },
                     {
                         title: '人数',
-                        render: (h,params)=>{
-                            let counts = params.row.users.length;
+                        render: (h, params) => {
+                            let counts = params.row.users_count;
                             return h('span', {}, counts);
                         }
                     },
@@ -134,6 +174,7 @@
                 pTotal: 0,
                 pCurrentPage: 1,
                 rTotal: 0,
+                roleID: 0,
                 rCurrentPage: 1
             };
         },
@@ -165,6 +206,13 @@
                         that.permissionData = res.data.data;
                     }
                 });
+            },
+            handleSyncPermissionByRole(val) {
+                this.permissionsCheck = val.permissions.map(res=>{
+                    return res.name;
+                });
+                this.roleID = val.id;
+                this.modalPermission = true;
             },
             handleAddPermission() {
                 let that = this;
@@ -217,11 +265,25 @@
             handleResetForm() {
                 let that = this;
                 new Promise(function (resolve, reject) {
-                    resolve('Reset Form!')
+                    resolve('Reset Form!');
                     that.clear()
                 }).then(() => {
                     that.$validator.reset()
                 });
+            },
+            permissionOK() {
+                let that = this;
+                this.$api.putSyncPermissionByRole(this.roleID,{'permissions': this.permissionsCheck}).then(res => {
+                    if (res.code === 200) {
+                        that.getRoles();
+                        that.handleCancel();
+                        that.$Message.success(res.data);
+                    }
+                });
+            },
+            handleCancel() {
+                this.roleID = 0;
+                this.permissionsCheck = [];
             },
             clear() {
                 this.formPermission.name = null;

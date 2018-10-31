@@ -37,7 +37,6 @@
       <div class="box">
         <div class="box-header">
           <h3 class="box-title">用户一览</h3>
-
           <div class="box-tools">
             <!--<div class="input-group input-group-sm" style="width: 150px;">-->
             <!--<input type="text" name="table_search" class="form-control pull-right" placeholder="Search">-->
@@ -59,9 +58,9 @@
       </div>
     </div>
     <Modal v-model="modalRole" :title="roleTitle" @on-ok="roleOk" @on-cancel="handleCancel">
-      <CheckboxGroup v-model="rolesCheck">
-        <Checkbox v-for="(item,index) in roles" :label="item.label" :value="item.value" :key="index"></Checkbox>
-      </CheckboxGroup>
+      <RadioGroup v-model="rolesCheck">
+        <Radio v-for="(item,index) in roles" :label="item.label" :value="item.value" :key="index"></Radio>
+      </RadioGroup>
     </Modal>
     <Modal v-model="modalPermission" :title="permissionTitle" @on-ok="permissionOK" @on-cancel="handleCancel">
       <CheckboxGroup v-model="permissionsCheck">
@@ -72,14 +71,18 @@
 </template>
 
 <script>
+    import poptipPermission from './poptipPermission.vue';
     export default {
+        components:{
+            poptipPermission
+        },
         props: {
             roles: Array,
             permissions: Array,
         },
         data() {
             return {
-                rolesCheck: [],
+                rolesCheck: '',
                 permissionsCheck: [],
                 modalRole: false,
                 modalPermission: false,
@@ -109,11 +112,25 @@
                         }
                     },
                     {
+                        title: '权限',
+                        tooltip: 'true',
+                        key: 'roles',
+                        render: (h, params) => {
+                            return h(poptipPermission, {
+                                props: {
+                                    permissions: params.row.permissions,
+                                }
+                            });
+                        }
+                    },
+                    {
                         title: '邮箱',
+                        tooltip: 'true',
                         key: 'email',
                     },
                     {
                         title: '上次活动时间',
+                        tooltip: 'true',
                         key: 'last_active_at',
                     },
                     {
@@ -198,7 +215,7 @@
                     if (res.code == 200) {
                         that.$Message.success(res.data);
                         that.checkUserId = 0;
-                        that.rolesCheck = [];
+                        that.rolesCheck = '';
                         that.getUsers();
                     } else {
                         that.$Message.error('未知错误！');
@@ -227,7 +244,7 @@
             handleClickRole(val) {
                 this.checkUserId = val.id;
                 this.roleTitle = val.account + ' 角色';
-                this.rolesCheck = val.roles;
+                this.rolesCheck = val.roles[0];
                 this.modalRole = true;
             },
             getUsers() {

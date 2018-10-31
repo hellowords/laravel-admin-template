@@ -6,6 +6,7 @@ use App\Http\Requests\AddPermission;
 use App\Http\Requests\AddRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRole;
+use App\Http\Requests\PutSyncPermissions;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
@@ -19,7 +20,7 @@ class RoleController extends Controller
      */
     public function permissions ()
     {
-        $permissions = Permission::with('users')->paginate(10);
+        $permissions = Permission::withCount('users')->paginate(10);
 
         return $this->successResponseData(200, $permissions);
     }
@@ -30,7 +31,7 @@ class RoleController extends Controller
      */
     public function roles ()
     {
-        $roles = Role::with('users')->paginate(10);
+        $roles = Role::with('permissions:id,name')->withCount('users')->paginate(10);
 
         return $this->successResponseData(200, $roles);
     }
@@ -74,5 +75,16 @@ class RoleController extends Controller
     public function syncRoleByUser (User $user, PostRole $postRole)
     {
         return $user->syncRoles($postRole->get('data')) ? $this->successResponseData(200, __('success')) : $this->errorResponseData();
+    }
+
+    /**同步角色的权限
+     * @param Role $role
+     * @param PutSyncPermissions $permissions
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function syncPermissionsByRole(Role $role, PutSyncPermissions $permissions)
+    {
+        $role->syncPermissions($permissions->input());
+        return $this->successResponseData(200,__('success'));
     }
 }

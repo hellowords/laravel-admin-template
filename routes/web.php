@@ -35,6 +35,7 @@ Route::prefix('admin')->namespace('Admin')->middleware([
     Route::get('users', 'UserController@getUsers');
     Route::get('roles', 'RoleController@roles');
     Route::get('permissions', 'RoleController@permissions');
+    Route::put('sync_permission_by_role/{role}', 'RoleController@syncPermissionsByRole');
     Route::post('role', 'RoleController@addRole');
     Route::post('permission', 'RoleController@addPermission');
     Route::post('sync_permission/{user}', 'RoleController@syncPermissionByUser');

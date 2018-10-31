@@ -72,6 +72,16 @@
                       v-show="errors.has('form-account.name')">{{ errors.first('form-account.name')
                   }}</span></div>
             </div>
+            <div class="form-group" :class="{'has-error' : errors.has('form-account.phone')}">
+              <label for="phone" class="col-sm-2 control-label">手机</label>
+
+              <div class="col-sm-10">
+                <input type="text" class="form-control" v-validate="'required'" data-vv-as="手机" name="phone"
+                       v-model="formAccount.phone">
+                <span class="help-block"
+                      v-show="errors.has('form-account.phone')">{{ errors.first('form-account.phone')
+                  }}</span></div>
+            </div>
           </div>
           <!-- /.box-body -->
           <div class="box-footer">
@@ -102,7 +112,8 @@
                 formAccount: {
                     account: this.user.account,
                     email: this.user.email,
-                    name: this.user.name
+                    name: this.user.name,
+                    phone: this.user.phone
                 }
             };
         },
