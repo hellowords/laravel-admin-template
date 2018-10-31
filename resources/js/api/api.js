@@ -50,4 +50,8 @@ export default {
     postSyncPermission(id, params) {
         return req.post(bashUrl + 'sync_permission/' + id, params)
     },
+    //同步角色的权限
+    putSyncPermissionByRole(id, params) {
+        return req.put(bashUrl + 'sync_permission_by_role/' + id, params);
+    }
 }
