@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /storage/*.key
+storage/.DS_Store
 /vendor
 /.idea
 /.vscode
@@ -9,6 +10,7 @@
 Homestead.json
 Homestead.yaml
 npm-debug.log
+public/.DS_Store
 yarn-error.log
 .env
 .phpunit.result.cache
@@ -16,3 +18,7 @@ yarn-error.log
 _ide_helper.php
 _ide_helper_models.php
 .phpstorm.meta.php
+app/Libs/.DS_Store
+.DS_Store
+app/.DS_Store
+storage/debugbar/

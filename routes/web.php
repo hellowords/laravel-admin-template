@@ -19,9 +19,17 @@ Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
 
+Route::middleware('auth')->group(function () {
+    Route::get('verify/phone', 'Admin\UserController@verify')->name('verify.phone');
+    Route::post('admin/user/unique_phone', 'Admin\UserController@checkPhone');
+    Route::post('admin/user/code', 'Admin\UserController@code');
+    Route::post('admin/user/checkCode', 'Admin\UserController@checkCode');
+});
+
 Route::prefix('admin')->namespace('Admin')->middleware([
     'auth',
     'verified',
+    'phone'
 ])->group(function() {
     Route::get('/', 'HomeController@index')->name('admin');
     Route::view('role', 'admin.role')->name('admin.role');

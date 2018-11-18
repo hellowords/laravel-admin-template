@@ -53,5 +53,17 @@ export default {
     //同步角色的权限
     putSyncPermissionByRole(id, params) {
         return req.put(bashUrl + 'sync_permission_by_role/' + id, params);
-    }
+    },
+    //检查手机唯一性
+    checkUniquePhone(val) {
+        return req.post(bashUrl + 'user/unique_phone', val);
+    },
+    //发送验证码
+    getCode(val) {
+        return req.post(bashUrl + 'user/code', val);
+    },
+    //验证验证码
+    checkCode(val) {
+        return req.post(bashUrl + 'user/checkCode', val);
+    },
 }

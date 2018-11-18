@@ -32,13 +32,27 @@
     @include('admin.layouts.footer')
 </div>
 
-<!-- jQuery 3 -->
-<script src="/js/jquery.min.js"></script>
-<!-- Bootstrap 3.3.7 -->
-<script src="/js/bootstrap.min.js"></script>
-<!-- AdminLTE App -->
-<script src="/js/adminlte.min.js"></script>
-
+@if(App::isLocal())
+    <!-- jQuery 3 -->
+    <script src="/js/jquery.min.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/js/adminlte.min.js"></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
+@else
+    <!-- jQuery 3 -->
+    <script src="/js/jquery.min.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/js/adminlte.min.js"></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
+    {{--    <script src="//{{ config('website.cdnDomain') }}/js/jquery.min.js" defer></script>--}}
+    {{--<script src="//{{ config('website.cdnDomain') }}/js/bootstrap.min.js" defer></script>--}}
+    {{--<script src="//{{ config('website.cdnDomain') }}/js/adminlte.min.js" defer></script>--}}
+    {{--<script src="//{{ config('website.cdnDomain') }}/js/{{config('website.jsVersion')}}/app.js" defer></script>--}}
+@endif
 {{--当前所选菜单自动展开--}}
 <script>
     $(function () {
@@ -74,6 +88,5 @@
     });
 </script>
 <!-- Scripts -->
-<script src="{{ asset('js/app.js') }}" defer></script>
 </body>
 </html>

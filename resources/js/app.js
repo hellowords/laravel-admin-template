@@ -20,6 +20,7 @@ Validator.localize('zh_CN', zh_CN);
 
 Vue.use(iView);
 Vue.use(VeeValidate, {
+    events: 'input|blur',
     locale: 'zh_CN',
     fieldsBagName: 'fieldBags',
 });
@@ -32,6 +33,8 @@ Vue.use(VeeValidate, {
 Vue.component('user', require('./components/admin/user.vue'));
 Vue.component('profile', require('./components/admin/profile.vue'));
 Vue.component('role', require('./components/admin/role.vue'));
+Vue.component('phone', require('./components/home/phone'));
+
 
 const app = new Vue({
     el: '#app',

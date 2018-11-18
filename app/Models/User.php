@@ -46,7 +46,7 @@ use Spatie\Permission\Traits\HasRoles;
  */
 class User extends Authenticatable implements MustVerifyEmailContract
 {
-    use Notifiable,HasRoles,SoftDeletes,MustVerifyEmail;
+    use Notifiable, HasRoles, SoftDeletes, MustVerifyEmail;
 
     /**
      * The attributes that are mass assignable.
@@ -66,7 +66,15 @@ class User extends Authenticatable implements MustVerifyEmailContract
         'password', 'remember_token',
     ];
 
-    public function profile ()
+    /**
+     * @return bool
+     */
+    public function hasVerifiedPhone()
+    {
+        return ! is_null($this->phone_verified_at);
+    }
+
+    public function profile()
     {
         return $this->hasOne(UserProfile::class);
     }

@@ -63,6 +63,20 @@ return [
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
         ],
+        'oss' => [
+            'driver'            => 'oss',
+            'access_id'         => env('ACCESS_KEY_ID'),
+            'access_key'        => env('ACCESS_KEY_SECRET'),
+            'bucket'            => env('BUCKET_NAME'),
+            'endpoint'          => env('END_POINT'),
+            // OSS 外网节点或自定义外部域名
+//            'endpoint_internal' => env('END_POINT_INTERNAL'),
+            'cdnDomain'         => env('CND_DOMAIN'),
+            // 如果isCName为true, getUrl会判断cdnDomain是否设定来决定返回的url，如果cdnDomain未设置，则使用endpoint来生成url，否则使用cdn
+            'ssl'               => true, // true to use 'https://' and false to use 'http://'. default is false,
+            'isCName'           => false, // 是否使用自定义域名,true: 则Storage.url()会使用自定义的cdn或域名生成文件url， false: 则使用外部节点生成url
+            'debug'             => false,
+        ],
 
     ],
 

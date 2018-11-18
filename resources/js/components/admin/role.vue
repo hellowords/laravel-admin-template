@@ -72,8 +72,9 @@
             <Table :columns="permissionColumns" :data="permissionData" border :loading="loadingPermission"></Table>
           </div>
           <div class="box-footer">
-            <Page class="pull-right" :total="pTotal" size="small" show-total :current="pCurrentPage"
-                  @on-change="changePermissionPage"></Page>
+            <!--Bug 角色Modal弹层只能渲染一页权限数据-->
+            <!--<Page class="pull-right" :total="pTotal" size="small" show-total :current="pCurrentPage"-->
+            <!--@on-change="changePermissionPage"></Page>-->
           </div>
         </div>
       </div>
@@ -171,8 +172,8 @@
                 ],
                 permissionData: [],
                 roleData: [],
-                pTotal: 0,
-                pCurrentPage: 1,
+                // pTotal: 0,
+                // pCurrentPage: 1,
                 rTotal: 0,
                 roleID: 0,
                 rCurrentPage: 1
@@ -201,9 +202,9 @@
                 that.$api.getPermissions({page: that.pCurrentPage}).then(res => {
                     if (res.code == 200) {
                         that.loadingPermission = false;
-                        that.pCurrentPage = res.data.current_page;
-                        that.pTotal = res.data.total;
-                        that.permissionData = res.data.data;
+                        // that.pCurrentPage = res.data.current_page;
+                        // that.pTotal = res.data.total;
+                        that.permissionData = res.data;
                     }
                 });
             },
@@ -238,10 +239,10 @@
                 this.rCurrentPage = page;
                 this.getRoles();
             },
-            changePermissionPage(page) {
-                this.pCurrentPage = page;
-                this.getPermissions();
-            },
+            // changePermissionPage(page) {
+            //     this.pCurrentPage = page;
+            //     this.getPermissions();
+            // },
             addRole() {
                 let that = this;
                 that.$api.addRole(that.formRole).then(res => {
