@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\UserRegistered;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\UserProfile;
