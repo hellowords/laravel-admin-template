@@ -28,7 +28,8 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('admin')->namespace('Admin')->middleware([
     'auth',
-    'verified',
+//    'verified',
+//    'phone',
 ])->group(function() {
     Route::get('/', 'HomeController@index')->name('admin');
     Route::view('role', 'admin.role')->name('admin.role');
