@@ -48,7 +48,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-5">
       <div class="row">
         <div class="box box-success">
           <div class="box-header with-border">
@@ -63,25 +63,22 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="box box-primary">
-          <div class="box-header with-border">
-            <h3 class="box-title">权限</h3>
-          </div>
-          <div class="box-body">
-            <Table :columns="permissionColumns" :data="permissionData" border :loading="loadingPermission"></Table>
-          </div>
-          <div class="box-footer">
-            <!--Bug 角色Modal弹层只能渲染一页权限数据-->
-            <!--<Page class="pull-right" :total="pTotal" size="small" show-total :current="pCurrentPage"-->
-            <!--@on-change="changePermissionPage"></Page>-->
-          </div>
+    </div>
+    <div class="col-md-4">
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">权限</h3>
+        </div>
+        <div class="box-body">
+          <CheckboxGroup>
+            <Checkbox v-for="(item,index) in permissionData" :label="item.label" :value="item.value" :key="index"></Checkbox>
+          </CheckboxGroup>
         </div>
       </div>
     </div>
     <Modal v-model="modalPermission" title="权限" @on-ok="permissionOK" @on-cancel="handleCancel">
       <CheckboxGroup v-model="permissionsCheck">
-        <Checkbox v-for="(item,index) in permissionData" :label="item.name" :value="item.id" :key="index"></Checkbox>
+        <Checkbox v-for="(item,index) in permissionData" :label="item.label" :value="item.value" :key="index"></Checkbox>
       </CheckboxGroup>
     </Modal>
   </div>
@@ -153,27 +150,8 @@
                         }
                     }
                 ],
-                permissionColumns: [
-                    {
-                        title: '权限',
-                        key: 'name'
-                    },
-                    {
-                        title: '人数',
-                        render: (h, params) => {
-                            let counts = params.row.users_count;
-                            return h('span', {}, counts);
-                        }
-                    },
-                    {
-                        title: '创建时间',
-                        key: 'created_at'
-                    }
-                ],
                 permissionData: [],
                 roleData: [],
-                // pTotal: 0,
-                // pCurrentPage: 1,
                 rTotal: 0,
                 roleID: 0,
                 rCurrentPage: 1

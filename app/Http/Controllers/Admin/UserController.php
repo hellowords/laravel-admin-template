@@ -34,14 +34,12 @@ class UserController extends Controller
 
     public function index()
     {
-        $user_info = collect(
-            [
-                'account' => Auth::user()->account,
-                'email'   => Auth::user()->email,
-                'name'    => Auth::user()->profile->real_name,
-                'phone'   => Auth::user()->profile->phone,
-            ]
-        );
+        $user_info = collect([
+            'account' => Auth::user()->account,
+            'email'   => Auth::user()->email,
+            'name'    => Auth::user()->profile->real_name,
+            'phone'   => Auth::user()->profile->phone,
+        ]);
 
         return view('admin.profile', compact('user_info'));
     }
@@ -90,21 +88,17 @@ class UserController extends Controller
     {
         $user = DB::transaction(
             function () use ($postUser) {
-                $user = User::create(
-                    [
-                        'account'  => $postUser->get('account'),
-                        'email'    => $postUser->get('email'),
-                        'password' => Hash::make(config('website.defaultPassword')),
-                    ]
-                );
+                $user = User::create([
+                    'account'  => $postUser->get('account'),
+                    'email'    => $postUser->get('email'),
+                    'password' => Hash::make(config('website.defaultPassword')),
+                ]);
 
                 $user->profile()->save(
-                    new UserProfile(
-                        [
-                            'real_name' => $postUser->get('name'),
-                            'avatar'    => '/images/faces/avatar'.rand(1, 10).'.jpg',
-                        ]
-                    )
+                    new UserProfile([
+                        'real_name' => $postUser->get('name'),
+                        'avatar'    => '/images/faces/avatar'.rand(1, 10).'.jpg',
+                    ])
                 );
 
                 return $user;

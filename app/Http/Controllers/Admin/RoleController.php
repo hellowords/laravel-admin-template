@@ -18,9 +18,16 @@ class RoleController extends Controller
      * @desc 权限分页数据
      * @return \Illuminate\Http\JsonResponse
      */
-    public function permissions ()
+    public function permissions()
     {
-        $permissions = Permission::withCount('users')->get();
+        $permissions = \Cache::rememberForever('permissions', function () {
+            return Permission::withCount('users')->get()->map(function ($item) {
+                return [
+                    'value' => $item->id,
+                    'label' => $item->name,
+                ];
+            });
+        });
 
         return $this->successResponseData(200, $permissions);
     }
@@ -29,7 +36,7 @@ class RoleController extends Controller
      * @desc 角色分页数据
      * @return \Illuminate\Http\JsonResponse
      */
-    public function roles ()
+    public function roles()
     {
         $roles = Role::with('permissions:id,name')->withCount('users')->paginate(10);
 
@@ -42,19 +49,23 @@ class RoleController extends Controller
      * @throws \Exception
      * @return \Illuminate\Http\JsonResponse
      */
-    public function addRole (AddRole $role)
+    public function addRole(AddRole $role)
     {
         cache()->forget('yewuRoleName');
+
         return Role::create($role->only('name')) ? $this->successResponseData() : $this->errorResponseData();
     }
 
     /**
      * @desc 添加权限
      * @param AddPermission $permission
+     * @throws
      * @return \Illuminate\Http\JsonResponse
      */
-    public function addPermission (AddPermission $permission)
+    public function addPermission(AddPermission $permission)
     {
+        cache()->forget('permissions');
+
         return Permission::create($permission->only('name')) ? $this->successResponseData() : $this->errorResponseData();
     }
 
@@ -66,9 +77,10 @@ class RoleController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function syncPermissionByUser (User $user, PostRole $request)
+    public function syncPermissionByUser(User $user, PostRole $request)
     {
         cache()->forget('addOrderUsers');
+
         //Todo 1号用户管理员角色不能取消
         return $user->syncPermissions($request->get('data')) ? $this->successResponseData(200, __('success')) : $this->errorResponseData();
     }
@@ -79,9 +91,10 @@ class RoleController extends Controller
      * @throws \Exception
      * @return \Illuminate\Http\JsonResponse
      */
-    public function syncRoleByUser (User $user, PostRole $postRole)
+    public function syncRoleByUser(User $user, PostRole $postRole)
     {
         cache()->forget('addOrderUsers');
+
         return $user->syncRoles($postRole->get('data')) ? $this->successResponseData(200, __('success')) : $this->errorResponseData();
     }
 
@@ -95,6 +108,7 @@ class RoleController extends Controller
     {
         cache()->forget('addOrderUsers');
         $role->syncPermissions($permissions->input());
-        return $this->successResponseData(200,__('success'));
+
+        return $this->successResponseData(200, __('success'));
     }
 }
