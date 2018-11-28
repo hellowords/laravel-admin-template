@@ -78,6 +78,17 @@ class RegisterController extends Controller
 
             return $user;
         });
+    }
 
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new UserRegistered($user = $this->create($request->all())));
+
+        $this->guard()->login($user);
+
+        return $this->registered($request, $user)
+            ?: redirect($this->redirectPath());
     }
 }
