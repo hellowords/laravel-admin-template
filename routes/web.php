@@ -17,7 +17,8 @@ Route::get('/', function() {
 
 Auth::routes(['verify' => true]);
 
-Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
+//Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
+Route::get('/home', 'HomeController@index')->name('home');
 
 Route::middleware('auth')->group(function () {
     Route::get('verify/phone', 'Admin\UserController@verify')->name('verify.phone');
